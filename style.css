@@ -22,7 +22,7 @@ th, td {
 .button {
     background-color: rgb(0, 119, 255);
     color: #ffffff;
-    padding: 6px;
+    padding: 6px 12px;
     border-radius: 5px;
     border: none;
     cursor: pointer;
@@ -34,14 +34,84 @@ th, td {
 
 #canvas {
     position: relative;
-    width: 1200px;
+    width: 1300px;
     height: 900px;
     margin: 20px auto;
     border: 1px solid #ddd;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
     overflow: hidden; 
+}
+
+#block1Container, #block2Container {
+    position: relative;
+    width: 50%;
+    height: 100%;
+}
+
+.row-el {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.rows-btn {
+    margin-left: 10px;
+    width: 70px;
+}
+
+.block-el {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+button {
+    height: 30px;
+    color: white;
+    background-color: rgb(71, 117, 233);
+    border: none;
+    border-radius: 5px;   
+    cursor: pointer;
+}
+
+#layout-btn {
+    width: 120px; 
+}
+
+.row-outer-div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    align-items: flex-start;
+}
+
+.row-box {
+    border: 2px solid black;
+    height: 50px;
+    width: 50px;
+    text-align: center;
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 2px; 
+}
+
+#seatContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px; 
+    overflow-y: auto;
+    max-height: 100%; 
+    box-sizing: border-box;
 }
 
 .seat {
