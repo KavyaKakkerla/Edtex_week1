@@ -8,11 +8,9 @@ function createTable() {
     }
 
     const tableContainer = document.getElementById("tableContainer");
-    tableContainer.innerHTML = ""; 
+    tableContainer.innerHTML = "";
 
     const table = document.createElement("table");
-
-
     const thead = document.createElement("thead");
     const headerRow = document.createElement("tr");
     ["Row", "B1 Seats", "B2 Seats"].forEach(text => {
@@ -23,7 +21,6 @@ function createTable() {
     thead.appendChild(headerRow);
     table.appendChild(thead);
 
-    
     const tbody = document.createElement("tbody");
     for (let i = 0; i < rows; i++) {
         const row = document.createElement("tr");
@@ -34,7 +31,8 @@ function createTable() {
             } else {
                 const input = document.createElement("input");
                 input.type = "number";
-                input.value = (i + 1) * 2 + 4; 
+                input.value = (i + 1) * 2 + 4;
+                input.className = j === 1 ? "block1Input" : "block2Input";
                 cell.appendChild(input);
             }
             row.appendChild(cell);
@@ -45,7 +43,6 @@ function createTable() {
     table.appendChild(tbody);
     tableContainer.appendChild(table);
 
-    
     let generateBtn = document.getElementById("generate-btn");
     if (!generateBtn) {
         generateBtn = document.createElement("button");
@@ -55,49 +52,64 @@ function createTable() {
         tableContainer.appendChild(generateBtn);
     }
 }
-
 function createArrangement() {
     const canvas = document.getElementById("canvas");
-    canvas.innerHTML = "";  
-    const rows = document.querySelectorAll("tbody tr");
+    canvas.innerHTML = ""; 
 
-    const centerX = canvas.offsetWidth / 2;
-    const centerY = canvas.offsetHeight / 2; 
-    const radiusStep = 120; 
+    const table = document.querySelector("table");
+    const rows = Array.from(table.querySelectorAll("tbody tr"));
 
-    rows.forEach((row, rowIndex) => {
+    const rowCount = rows.length;
+    const block1Inputs = [];
+    const block2Inputs = [];
+
+    rows.forEach(row => {
         const inputs = row.querySelectorAll("input");
-        const b1Seats = parseInt(inputs[0].value);
-        const b2Seats = parseInt(inputs[1].value);
-        const totalSeats = b1Seats + b2Seats;
+        block1Inputs.unshift(parseInt(inputs[0].value));
+        block2Inputs.unshift(parseInt(inputs[1].value));
+    });
 
-        if (totalSeats <= 0) return;
+    const max1 = Math.max(...block1Inputs);
+    const max2 = Math.max(...block2Inputs);
+    const maxSeats = Math.max(max1, max2);
 
-        const radius = (rowIndex + 1) * radiusStep;
-        const angleStep = Math.PI / (totalSeats - 1); 
+    const centerX = 600;
+    const centerY = 600;
 
-        for (let i = 0; i < totalSeats; i++) {
-            const angle = Math.PI - i * angleStep; 
+    for (let row = rowCount - 1; row >= 0; row--) {
+        const radius = 550 - (rowCount - 1 - row) * 50; 
+
+       
+        for (let i = block1Inputs[rowCount - 1 - row] - 1; i >= 0; i--) {
+            const angle = -Math.PI / 2 - (Math.PI / 2) * (i / (maxSeats - 1));
+            const x = centerX + radius * Math.cos(angle);
+            const y = centerY + radius * Math.sin(angle);
 
             const seat = document.createElement("div");
-            seat.classList.add("seat");
-
-            
-            seat.textContent = (i < b1Seats) ? i + 1 : i - b1Seats + 1;
-
-            
-            const x = centerX + radius * Math.cos(angle) + 65; 
-            const y = centerY - radius * Math.sin(angle) + 65; 
-
-            
-            const tangentAngle = -(angle * 180) / Math.PI + 90;
-
-            
+            seat.className = "seat";
             seat.style.left = `${x}px`;
             seat.style.top = `${y}px`;
-            seat.style.transform = `rotate(${tangentAngle}deg)`;  
 
+            seat.style.transform = `rotate(${(angle * 180) / Math.PI + 90}deg)`;
+            seat.textContent = i + 1;
             canvas.appendChild(seat);
         }
-    });
+
+        
+        for (let i = 0; i < block2Inputs[rowCount - 1 - row]; i++) {
+            const angle = (Math.PI / 2) * (i / (maxSeats - 1)) - Math.PI / 2;
+            const x = centerX + radius * Math.cos(angle) + 100;
+            const y = centerY + radius * Math.sin(angle);
+
+            const seat = document.createElement("div");
+            seat.className = "seat";
+            seat.style.left = `${x}px`;
+            seat.style.top = `${y}px`;
+
+            seat.style.transform = `rotate(${(angle * 180) / Math.PI + 90}deg)`;
+            seat.textContent = i + 1;
+            canvas.appendChild(seat);
+        }
+    }
 }
+
